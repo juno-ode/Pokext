@@ -24,7 +24,6 @@
   }
 
   * { box-sizing: border-box; }
-
   html { scroll-behavior: smooth; }
 
   body {
@@ -37,17 +36,14 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* ---- layout ---- */
   .layout {
     display: grid;
-    grid-template-columns: 240px 1fr;
+    grid-template-columns: 260px 1fr;
     max-width: 1400px;
     margin: 0 auto;
-    gap: 0;
     min-height: 100vh;
   }
 
-  /* ---- sidebar ---- */
   nav.toc {
     position: sticky;
     top: 0;
@@ -90,13 +86,11 @@
     color: #6e7681;
   }
 
-  /* ---- main ---- */
   main {
     padding: 40px 48px 120px;
-    max-width: 900px;
+    max-width: 950px;
   }
 
-  /* ---- banner ---- */
   .banner {
     background: var(--bg-code);
     border: 1px solid var(--border);
@@ -116,7 +110,6 @@
     font-size: 11px;
   }
 
-  /* ---- headings ---- */
   h1 {
     font-size: 30px;
     font-weight: 700;
@@ -165,7 +158,6 @@
     margin: 0 0 32px;
   }
 
-  /* ---- code ---- */
   code {
     font-family: "SF Mono", Monaco, "Cascadia Code", Consolas, monospace;
     font-size: 0.88em;
@@ -196,19 +188,17 @@
     font-size: inherit;
   }
 
-  /* syntax highlighting */
-  .k  { color: var(--purple); }   /* keyword */
-  .s  { color: var(--yellow); }   /* string */
-  .c  { color: #6e7681; font-style: italic; }   /* comment */
-  .n  { color: var(--blue); }     /* number */
-  .f  { color: var(--accent); }   /* function */
-  .v  { color: var(--fg); }       /* variable */
-  .o  { color: var(--pink); }     /* operator */
-  .p  { color: var(--fg-dim); }   /* punctuation */
-  .t  { color: var(--warn); }     /* type */
-  .a  { color: #7ee787; }         /* attribute */
+  .k  { color: var(--purple); }
+  .s  { color: var(--yellow); }
+  .c  { color: #6e7681; font-style: italic; }
+  .n  { color: var(--blue); }
+  .f  { color: var(--accent); }
+  .v  { color: var(--fg); }
+  .o  { color: var(--pink); }
+  .p  { color: var(--fg-dim); }
+  .t  { color: var(--warn); }
+  .a  { color: #7ee787; }
 
-  /* ---- tables ---- */
   table {
     width: 100%;
     border-collapse: collapse;
@@ -239,11 +229,8 @@
     white-space: nowrap;
   }
 
-  tr:hover td {
-    background: var(--bg-elev);
-  }
+  tr:hover td { background: var(--bg-elev); }
 
-  /* ---- callouts ---- */
   .callout {
     border-left: 3px solid var(--accent-dim);
     background: rgba(0, 255, 136, 0.04);
@@ -258,18 +245,11 @@
     background: rgba(240, 136, 62, 0.05);
   }
 
-  .callout.warn strong {
-    color: var(--warn);
-  }
-
-  .callout strong {
-    color: var(--accent-dim);
-  }
-
+  .callout.warn strong { color: var(--warn); }
+  .callout strong { color: var(--accent-dim); }
   .callout p:first-child { margin-top: 0; }
   .callout p:last-child  { margin-bottom: 0; }
 
-  /* ---- inline key hints ---- */
   kbd {
     display: inline-block;
     padding: 2px 7px;
@@ -282,7 +262,6 @@
     box-shadow: 0 1px 0 var(--border-hi);
   }
 
-  /* ---- pills ---- */
   .pill {
     display: inline-block;
     padding: 2px 9px;
@@ -298,7 +277,6 @@
   .pill.mix  { background: rgba(0, 255, 136, 0.12);  color: var(--accent); }
   .pill.warn { background: rgba(240, 136, 62, 0.15); color: var(--warn); }
 
-  /* ---- mobile ---- */
   @media (max-width: 900px) {
     .layout { grid-template-columns: 1fr; }
     nav.toc { display: none; }
@@ -308,8 +286,6 @@
     pre { font-size: 12px; padding: 12px 14px; }
   }
 
-  /* ---- copy button ---- */
-  pre { position: relative; }
   pre .copy {
     position: absolute;
     top: 8px;
@@ -337,6 +313,8 @@
 <nav class="toc">
   <h2>Contents</h2>
   <a href="#intro">Introduction</a>
+  <a href="#setup">Setup</a>
+
   <a href="#raw">1. Raw API</a>
   <a href="#raw-sym"      class="sub">Symbols</a>
   <a href="#raw-mem"      class="sub">Memory</a>
@@ -344,6 +322,7 @@
   <a href="#raw-call"     class="sub">Calls</a>
   <a href="#raw-hook"     class="sub">Hooks</a>
   <a href="#raw-modules"  class="sub">Modules</a>
+
   <a href="#hl">2. pokexhl</a>
   <a href="#hl-proc"      class="sub">Process</a>
   <a href="#hl-ptr"       class="sub">NativePointer</a>
@@ -351,8 +330,11 @@
   <a href="#hl-call"      class="sub">Calls</a>
   <a href="#hl-hook"      class="sub">Hooks</a>
   <a href="#hl-watch"     class="sub">Watch</a>
-  <a href="#both">3. Combined</a>
-  <a href="#patterns">Common Patterns</a>
+
+  <a href="#both">3. Combined example</a>
+  <a href="#bridge">4. Writing a bridge</a>
+  <a href="#full">5. Full cheat script</a>
+  <a href="#patterns">Common patterns</a>
   <a href="#types">Types</a>
   <a href="#debug">Debugging</a>
 </nav>
@@ -374,15 +356,19 @@
   Mix them freely; they read the same memory.
 </p>
 
-<div class="callout">
-  <strong>Setup:</strong>
-  <pre style="margin:8px 0 0; padding:10px 14px;"><code><span class="c"># install once</span>
+<!-- ================================================================ -->
+<h2 id="setup">Setup</h2>
+
+<pre><code><span class="c"># clone and install</span>
 git clone https://github.com/&lt;you&gt;/pokext.git
-cd pokext &amp;&amp; ./install.sh
+cd pokext
+./install.sh
 
 <span class="c"># run any script</span>
-sudo pokext $(pidof -s &lt;target&gt;) script.py</code></pre>
-</div>
+sudo pokext $(pidof -s &lt;target&gt;) script.py
+
+<span class="c"># optional: skip the banner (useful in scripts)</span>
+sudo pokext $(pidof -s &lt;target&gt;) script.py --no-banner</code></pre>
 
 <!-- ================================================================ -->
 <h2 id="raw">1. Raw API <span class="pill raw">no import</span></h2>
@@ -594,7 +580,7 @@ w<span class="p">.</span><span class="f">stop</span>()       <span class="c"># l
 buf<span class="p">.</span><span class="f">write_cstr</span>(<span class="s">"hello"</span>)</code></pre>
 
 <!-- ================================================================ -->
-<h2 id="both">3. Both in one file <span class="pill mix">combined</span></h2>
+<h2 id="both">3. Combined example <span class="pill mix">raw + hl</span></h2>
 
 <pre><code><span class="c"># example.py — raw + high-level API mixed</span>
 <span class="c"># run: sudo pokext $(pidof -s &lt;target&gt;) example.py</span>
@@ -606,7 +592,6 @@ buf<span class="p">.</span><span class="f">write_cstr</span>(<span class="s">"he
 
 <span class="c"># ==================== raw API ====================</span>
 <span class="c"># `target` is injected into globals by pokext</span>
-<span class="c"># No import needed, no wrapper</span>
 
 <span class="f">print</span>(<span class="s">"--- raw API ---"</span>)
 
@@ -620,7 +605,6 @@ buf<span class="p">.</span><span class="f">write_cstr</span>(<span class="s">"he
 <span class="k">except</span> <span class="t">KeyError</span> <span class="k">as</span> e:
     <span class="f">print</span>(<span class="s">f"symbol not found: {e}"</span>)
 
-<span class="c"># raw scan</span>
 hits <span class="o">=</span> target<span class="p">.</span><span class="f">scan_all</span>(<span class="s">"48 8B 05 ?? ?? ?? ??"</span>)
 <span class="f">print</span>(<span class="s">f"raw scan: {len(hits)} hits"</span>)
 
@@ -634,7 +618,6 @@ p <span class="o">=</span> px<span class="p">.</span><span class="t">Process</sp
 <span class="f">print</span>(<span class="s">f"attached to {p.exe} (pid {p.pid})"</span>)
 <span class="f">print</span>(<span class="s">f"base: {p.base}"</span>)
 
-<span class="c"># same operations, object style</span>
 <span class="k">try</span>:
     score <span class="o">=</span> p<span class="p">.</span><span class="f">sym</span>(<span class="s">"score"</span>)
     <span class="f">print</span>(<span class="s">f"score @ {score}"</span>)
@@ -645,7 +628,6 @@ p <span class="o">=</span> px<span class="p">.</span><span class="t">Process</sp
 <span class="k">except</span> <span class="t">KeyError</span> <span class="k">as</span> e:
     <span class="f">print</span>(<span class="s">f"symbol not found: {e}"</span>)
 
-<span class="c"># call into target</span>
 <span class="k">try</span>:
     fps <span class="o">=</span> p<span class="p">.</span><span class="f">fn</span>(<span class="s">"GetFPS"</span>)()
     <span class="f">print</span>(<span class="s">f"GetFPS = {fps}"</span>)
@@ -693,14 +675,160 @@ wrapped  <span class="o">=</span> [p<span class="p">.</span><span class="f">ptr<
 <span class="k">except</span> <span class="t">KeyError</span>:
     <span class="f">print</span>(<span class="s">"no 'score' symbol — try the scan version"</span>)</code></pre>
 
+<!-- ================================================================ -->
+<h2 id="bridge">4. Writing a bridge</h2>
+
+<p>
+  A bridge encodes your target's known layout so cheat scripts stay short.
+  Bridges are plain Python — they import <code>pokexhl</code> and layer on top.
+</p>
+
+<pre><code><span class="c"># mygame.py — bridge for MyGame</span>
+<span class="k">import</span> pokexhl <span class="k">as</span> px
+
+
+<span class="k">class</span> <span class="t">MyGame</span>:
+    <span class="k">def</span> <span class="f">__init__</span>(self):
+        self<span class="p">.</span>p      <span class="o">=</span> px<span class="p">.</span><span class="t">Process</span>()
+        self<span class="p">.</span>player <span class="o">=</span> self<span class="p">.</span>p<span class="p">.</span><span class="f">sym</span>(<span class="s">"player_entity"</span>)
+
+    <span class="c"># --- simple scalar field ---</span>
+    <span class="k">@property</span>
+    <span class="k">def</span> <span class="f">health</span>(self):
+        <span class="k">return</span> self<span class="p">.</span>player<span class="p">.</span><span class="f">add</span>(<span class="n">0x40</span>)<span class="p">.</span><span class="f">read_i32</span>()
+
+    <span class="k">@health</span><span class="p">.</span><span class="f">setter</span>
+    <span class="k">def</span> <span class="f">health</span>(self, v):
+        self<span class="p">.</span>player<span class="p">.</span><span class="f">add</span>(<span class="n">0x40</span>)<span class="p">.</span><span class="f">write_i32</span>(v)
+
+    <span class="c"># --- pointer-chained field ---</span>
+    <span class="k">@property</span>
+    <span class="k">def</span> <span class="f">gold</span>(self):
+        <span class="k">return</span> self<span class="p">.</span>player<span class="p">.</span><span class="f">follow</span>(<span class="n">0x18</span>, <span class="n">0x20</span>)<span class="p">.</span><span class="f">read_i32</span>()
+
+    <span class="c"># --- vector field ---</span>
+    <span class="k">@property</span>
+    <span class="k">def</span> <span class="f">position</span>(self):
+        v <span class="o">=</span> self<span class="p">.</span>player<span class="p">.</span><span class="f">add</span>(<span class="n">0x0C</span>)
+        <span class="k">return</span> (v<span class="p">.</span><span class="f">read_f32</span>(),
+                v<span class="p">.</span><span class="f">add</span>(<span class="n">4</span>)<span class="p">.</span><span class="f">read_f32</span>(),
+                v<span class="p">.</span><span class="f">add</span>(<span class="n">8</span>)<span class="p">.</span><span class="f">read_f32</span>())
+
+    <span class="k">@position</span><span class="p">.</span><span class="f">setter</span>
+    <span class="k">def</span> <span class="f">position</span>(self, xyz):
+        x, y, z <span class="o">=</span> xyz
+        v <span class="o">=</span> self<span class="p">.</span>player<span class="p">.</span><span class="f">add</span>(<span class="n">0x0C</span>)
+        v<span class="p">.</span><span class="f">write_f32</span>(x)
+        v<span class="p">.</span><span class="f">add</span>(<span class="n">4</span>)<span class="p">.</span><span class="f">write_f32</span>(y)
+        v<span class="p">.</span><span class="f">add</span>(<span class="n">8</span>)<span class="p">.</span><span class="f">write_f32</span>(z)
+
+    <span class="c"># --- action methods ---</span>
+    <span class="k">def</span> <span class="f">enable_godmode</span>(self):
+        self<span class="p">.</span>player<span class="p">.</span><span class="f">add</span>(<span class="n">0x50</span>)<span class="p">.</span><span class="f">write_i32</span>(<span class="n">1</span>)
+
+    <span class="k">def</span> <span class="f">teleport</span>(self, x, y, z):
+        self<span class="p">.</span><span class="f">position</span> <span class="o">=</span> (x, y, z)</code></pre>
+
+<p>Then a cheat script becomes:</p>
+
+<pre><code><span class="c"># cheat.py</span>
+<span class="k">from</span> mygame <span class="k">import</span> <span class="t">MyGame</span>
+<span class="k">import</span> time
+
+g <span class="o">=</span> <span class="t">MyGame</span>()
+
+<span class="f">print</span>(<span class="s">f"health  = {g.health}"</span>)
+<span class="f">print</span>(<span class="s">f"gold    = {g.gold}"</span>)
+<span class="f">print</span>(<span class="s">f"pos     = {g.position}"</span>)
+
+g<span class="p">.</span><span class="f">enable_godmode</span>()
+g<span class="p">.</span><span class="f">teleport</span>(<span class="n">100</span>, <span class="n">50</span>, <span class="n">100</span>)
+
+<span class="k">while</span> <span class="t">True</span>:
+    g<span class="p">.</span><span class="f">health</span> <span class="o">=</span> <span class="n">9999</span>
+    time<span class="p">.</span><span class="f">sleep</span>(<span class="n">0.1</span>)</code></pre>
+
 <div class="callout">
-  <strong>When to use which:</strong>
-  raw for quick pokes and REPL exploration; pokexhl for anything
-  longer than five lines. They read the same memory, so mix freely.
+  <strong>Bridge design tips:</strong>
+  <ul>
+    <li>Expose fields as properties, actions as methods</li>
+    <li>Cache pointers in <code>__init__</code> — resolution is slow</li>
+    <li>Let <code>KeyError</code> propagate so missing symbols fail loudly</li>
+    <li>One bridge per game, its own repo, installed separately</li>
+  </ul>
 </div>
 
 <!-- ================================================================ -->
-<h2 id="patterns">Common Patterns</h2>
+<h2 id="full">5. Full cheat script</h2>
+
+<p>A complete example that combines everything:</p>
+
+<pre><code><span class="c"># full_cheat.py — a complete cheat script</span>
+<span class="c"># run: sudo pokext $(pidof -s &lt;target&gt;) full_cheat.py</span>
+<span class="k">import</span> struct
+<span class="k">import</span> time
+<span class="k">import</span> pokexhl <span class="k">as</span> px
+
+
+<span class="c"># ==================== setup ====================</span>
+
+p <span class="o">=</span> px<span class="p">.</span><span class="t">Process</span>()
+<span class="f">print</span>(<span class="s">f"attached to {p.exe} (pid {p.pid})"</span>)
+<span class="f">print</span>(<span class="s">f"base: {p.base}\n"</span>)
+
+
+<span class="c"># ==================== find the health address ====================</span>
+
+<span class="f">print</span>(<span class="s">"step 1: locate health by scan-and-refine"</span>)
+
+v <span class="o">=</span> <span class="f">int</span>(<span class="f">input</span>(<span class="s">"  current health: "</span>))
+hits <span class="o">=</span> p<span class="p">.</span><span class="f">scan</span>(struct<span class="p">.</span><span class="f">pack</span>(<span class="s">"&lt;i"</span>, v)<span class="p">.</span><span class="f">hex</span>(<span class="s">" "</span>))<span class="p">.</span><span class="f">all</span>()
+<span class="f">print</span>(<span class="s">f"  {len(hits)} candidates"</span>)
+
+<span class="k">while</span> <span class="f">len</span>(hits) <span class="o">&gt;</span> <span class="n">1</span>:
+    <span class="f">input</span>(<span class="s">"  take damage, then Enter..."</span>)
+    new <span class="o">=</span> <span class="f">int</span>(<span class="f">input</span>(<span class="s">"  new health: "</span>))
+    hits <span class="o">=</span> [h <span class="k">for</span> h <span class="k">in</span> hits <span class="k">if</span> h<span class="p">.</span><span class="f">read_i32</span>() <span class="o">==</span> new]
+    <span class="f">print</span>(<span class="s">f"  {len(hits)} candidates"</span>)
+
+health <span class="o">=</span> hits[<span class="n">0</span>]
+<span class="f">print</span>(<span class="s">f"  health @ {health}\n"</span>)
+
+
+<span class="c"># ==================== watch it change ====================</span>
+
+changes <span class="o">=</span> []
+
+<span class="k">def</span> <span class="f">on_hp_change</span>(old, new):
+    changes<span class="p">.</span><span class="f">append</span>((old, new))
+    <span class="f">print</span>(<span class="s">f"  [watch] {old} -&gt; {new}"</span>)
+
+w <span class="o">=</span> p<span class="p">.</span><span class="f">watch</span>(health, <span class="s">"i32"</span>, interval<span class="o">=</span><span class="n">0.05</span>)
+w<span class="p">.</span><span class="f">on_change</span>(on_hp_change)
+w<span class="p">.</span><span class="f">start</span>()
+
+<span class="f">print</span>(<span class="s">"step 2: watching for 10 seconds..."</span>)
+time<span class="p">.</span><span class="f">sleep</span>(<span class="n">10</span>)
+w<span class="p">.</span><span class="f">stop</span>()
+<span class="f">print</span>(<span class="s">f"  saw {len(changes)} changes\n"</span>)
+
+
+<span class="c"># ==================== pin it ====================</span>
+
+<span class="f">print</span>(<span class="s">"step 3: pinning health at 9999"</span>)
+<span class="f">print</span>(<span class="s">"press Ctrl-C to stop\n"</span>)
+
+<span class="k">try</span>:
+    <span class="k">while</span> <span class="t">True</span>:
+        health<span class="p">.</span><span class="f">write_i32</span>(<span class="n">9999</span>)
+        time<span class="p">.</span><span class="f">sleep</span>(<span class="n">0.1</span>)
+<span class="k">except</span> <span class="t">KeyboardInterrupt</span>:
+    <span class="f">print</span>(<span class="s">"\nstopped"</span>)
+    <span class="f">print</span>(<span class="s">f"final value: {health.read_i32()}"</span>)
+    <span class="f">print</span>(<span class="s">f"changes seen: {len(changes)}"</span>)</code></pre>
+
+<!-- ================================================================ -->
+<h2 id="patterns">Common patterns</h2>
 
 <h3>Scan and pin</h3>
 <pre><code><span class="k">import</span> struct, time
@@ -710,23 +838,18 @@ p <span class="o">=</span> px<span class="p">.</span><span class="t">Process</sp
 
 v <span class="o">=</span> <span class="f">int</span>(<span class="f">input</span>(<span class="s">"current value: "</span>))
 hits <span class="o">=</span> p<span class="p">.</span><span class="f">scan</span>(struct<span class="p">.</span><span class="f">pack</span>(<span class="s">"&lt;i"</span>, v)<span class="p">.</span><span class="f">hex</span>(<span class="s">" "</span>))<span class="p">.</span><span class="f">all</span>()
-<span class="f">print</span>(<span class="s">f"{len(hits)} candidates"</span>)
 
 <span class="f">input</span>(<span class="s">"change it, then Enter"</span>)
 new <span class="o">=</span> <span class="f">int</span>(<span class="f">input</span>(<span class="s">"new value: "</span>))
 
 refined <span class="o">=</span> [h <span class="k">for</span> h <span class="k">in</span> hits <span class="k">if</span> h<span class="p">.</span><span class="f">read_i32</span>() <span class="o">==</span> new]
 addr <span class="o">=</span> refined[<span class="n">0</span>]
-<span class="f">print</span>(<span class="s">f"pinning at 9999"</span>)
 
-<span class="k">try</span>:
-    <span class="k">while</span> <span class="t">True</span>:
-        addr<span class="p">.</span><span class="f">write_i32</span>(<span class="n">9999</span>)
-        time<span class="p">.</span><span class="f">sleep</span>(<span class="n">0.1</span>)
-<span class="k">except</span> <span class="t">KeyboardInterrupt</span>:
-    <span class="k">pass</span></code></pre>
+<span class="k">while</span> <span class="t">True</span>:
+    addr<span class="p">.</span><span class="f">write_i32</span>(<span class="n">9999</span>)
+    time<span class="p">.</span><span class="f">sleep</span>(<span class="n">0.1</span>)</code></pre>
 
-<h3>Read multiple struct fields</h3>
+<h3>Read a struct</h3>
 <pre><code><span class="k">import</span> pokexhl <span class="k">as</span> px
 p <span class="o">=</span> px<span class="p">.</span><span class="t">Process</span>()
 
@@ -734,25 +857,7 @@ player <span class="o">=</span> p<span class="p">.</span><span class="f">sym</sp
 
 hp    <span class="o">=</span> player<span class="p">.</span><span class="f">add</span>(<span class="n">0x40</span>)<span class="p">.</span><span class="f">read_i32</span>()
 armor <span class="o">=</span> player<span class="p">.</span><span class="f">add</span>(<span class="n">0x44</span>)<span class="p">.</span><span class="f">read_i32</span>()
-xp    <span class="o">=</span> target<span class="p">.</span><span class="f">read</span>(player<span class="p">.</span>addr <span class="o">+</span> <span class="n">0x48</span>, <span class="s">"i32"</span>)   <span class="c"># raw for variety</span>
-
-<span class="f">print</span>(<span class="s">f"hp={hp} armor={armor} xp={xp}"</span>)</code></pre>
-
-<h3>Watch and print</h3>
-<pre><code><span class="k">import</span> time
-<span class="k">import</span> pokexhl <span class="k">as</span> px
-
-p <span class="o">=</span> px<span class="p">.</span><span class="t">Process</span>()
-addr <span class="o">=</span> p<span class="p">.</span><span class="f">sym</span>(<span class="s">"health"</span>)
-
-w <span class="o">=</span> p<span class="p">.</span><span class="f">watch</span>(addr, <span class="s">"i32"</span>, interval<span class="o">=</span><span class="n">0.02</span>)
-w<span class="p">.</span><span class="f">on_change</span>(<span class="k">lambda</span> old, new: <span class="f">print</span>(<span class="s">f"health: {old} -&gt; {new}"</span>))
-w<span class="p">.</span><span class="f">start</span>()
-
-<span class="k">try</span>:
-    time<span class="p">.</span><span class="f">sleep</span>(<span class="n">60</span>)
-<span class="k">except</span> <span class="t">KeyboardInterrupt</span>:
-    w<span class="p">.</span><span class="f">stop</span>()</code></pre>
+xp    <span class="o">=</span> target<span class="p">.</span><span class="f">read</span>(player<span class="p">.</span>addr <span class="o">+</span> <span class="n">0x48</span>, <span class="s">"i32"</span>)</code></pre>
 
 <h3>Hook and log</h3>
 <pre><code><span class="k">import</span> time
@@ -811,6 +916,8 @@ fn <span class="o">=</span> p<span class="p">.</span><span class="f">fn</span>(<
   <tr><td>Call hangs forever</td><td>Target is blocking — don't call I/O or sleeps</td></tr>
   <tr><td>Game crashes on hook</td><td>Bump <code>prologue=32</code> in <code>hook_inline</code></td></tr>
   <tr><td>Values don't stick</td><td>Page is read-only → use <code>patch</code>, not <code>write</code></td></tr>
+  <tr><td>Float returns garbage</td><td>Old pokext — upgrade to v0.4.4+</td></tr>
+  <tr><td>Wrong PID / no attach</td><td><code>pidof -s name</code> returns one PID; without <code>-s</code> it can return many</td></tr>
 </table>
 
 <div class="callout warn">
@@ -824,7 +931,6 @@ fn <span class="o">=</span> p<span class="p">.</span><span class="f">fn</span>(<
 </div>
 
 <script>
-  // Add copy buttons to every pre block
   document.querySelectorAll('pre').forEach(pre => {
     const btn = document.createElement('button');
     btn.className = 'copy';
@@ -843,9 +949,10 @@ fn <span class="o">=</span> p<span class="p">.</span><span class="f">fn</span>(<
     pre.appendChild(btn);
   });
 
-  // Highlight current TOC section on scroll
   const tocLinks = document.querySelectorAll('nav.toc a[href^="#"]');
-  const sections = [...tocLinks].map(a => document.getElementById(a.getAttribute('href').slice(1))).filter(Boolean);
+  const sections = [...tocLinks]
+    .map(a => document.getElementById(a.getAttribute('href').slice(1)))
+    .filter(Boolean);
 
   const observer = new IntersectionObserver(entries => {
     entries.forEach(e => {
