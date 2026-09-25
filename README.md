@@ -12,6 +12,21 @@ process — all from outside the target.
 /_/    \____/_/|_|\___/     v0.4.4
 ```
 
+<p align="center">
+  <a href="docs/cheatsheet.html"><b>📖 Cheat Sheet</b></a>
+  &nbsp;·&nbsp;
+  <a href="#install">Install</a>
+  &nbsp;·&nbsp;
+  <a href="#usage">Usage</a>
+  &nbsp;·&nbsp;
+  <a href="examples/">Examples</a>
+  &nbsp;·&nbsp;
+  <a href="#limitations">Limitations</a>
+</p>
+
+> **Full API reference:** [`docs/cheatsheet.html`](docs/cheatsheet.html) — every
+> method, every type, every example. Single HTML file, no dependencies.
+
 ## What it is
 
 pokext is an *external* patcher. It never injects code into the target.
@@ -63,7 +78,7 @@ cd pokext
 ```
 
 That builds the binary, installs it to `/usr/local/bin/pokext`, and copies
-`pokexhl.py` to `/usr/local/share/pokex/`.
+the Python libs from `Pylib/` to `/usr/local/share/pokex/`.
 
 ### Manual
 
@@ -71,7 +86,7 @@ That builds the binary, installs it to `/usr/local/bin/pokext`, and copies
 gcc -O2 -o pokext src/pokext.c $(python3-config --includes --embed --ldflags)
 sudo cp pokext /usr/local/bin/pokext
 sudo mkdir -p /usr/local/share/pokex
-sudo cp lib/pokexhl.py /usr/local/share/pokex/
+sudo cp Pylib/*.py /usr/local/share/pokex/
 ```
 
 Or with make:
@@ -104,7 +119,7 @@ receives a `target` object in its globals. Everything else is your script.
 
 ### Hello world
 
-`examples/hello.py`:
+`examples/01_hello.py`:
 
 ```python
 import pokexhl as px
@@ -119,122 +134,55 @@ for m in p.modules()[:5]:
 
 Run:
 ```bash
-sudo pokext $(pidof -s mytarget) examples/hello.py
+sudo pokext $(pidof -s mytarget) examples/01_hello.py
 ```
 
-## API — `pokexhl`
+## Cheat sheet
 
-The high-level Python library mirrors Frida's shape. This is what you write
-scripts against.
+Everything you need to write scripts lives in
+[`docs/cheatsheet.html`](docs/cheatsheet.html):
 
-### Process / modules
+- **Both APIs** — the raw `target` object and the high-level `pokexhl` wrapper,
+  side by side
+- **Full type table** — every read/write variant
+- **Scan syntax** — wildcards, module restriction
+- **Call tags** — struct-by-value argument packing
+- **Hooks** — redirects, trampolines, byte patches
+- **Watchers** — polling callbacks
+- **Common patterns** — scan-and-pin, struct walking, hook-and-log
+- **Debugging table** — every error and its fix
+- **Copy buttons** on every code block
+- **Search** — <kbd>Ctrl-F</kbd> to jump to any method
 
-```python
-import pokexhl as px
-p = px.Process()
+Open it locally, or enable GitHub Pages (repo → Settings → Pages → `/docs`)
+and it's served at `https://<you>.github.io/pokext/cheatsheet.html`.
 
-p.pid                # int
-p.base               # NativePointer
-p.exe                # str
-p.modules()          # list[Module]
-p.module("libc.so.6")   # Module (raises KeyError)
-p.sym("score")       # NativePointer
-p.fn("GetTime")      # NativeFunction
-```
+## Examples
 
-### NativePointer
+Nine working scripts in [`examples/`](examples/), from hello-world through
+hooking and calling functions:
 
-```python
-ptr = p.sym("score")
-ptr = p.base.add(0x1000)
-ptr = p.ptr(0x7f1234)
+| # | File | Concept |
+|---|---|---|
+| 01 | [`01_hello.py`](examples/01_hello.py) | Attach, list modules, read memory |
+| 02 | [`02_read_write.py`](examples/02_read_write.py) | Read/write globals by symbol |
+| 03 | [`03_scan_pin.py`](examples/03_scan_pin.py) | Find a value by scanning, pin it |
+| 04 | [`04_pattern_scan.py`](examples/04_pattern_scan.py) | AOB scan for code patterns |
+| 05 | [`05_pointer_chain.py`](examples/05_pointer_chain.py) | Multi-level pointer following |
+| 06 | [`06_hook.py`](examples/06_hook.py) | Redirect a function with a trampoline |
+| 07 | [`07_call_function.py`](examples/07_call_function.py) | Call functions inside the target |
+| 08 | [`08_watch.py`](examples/08_watch.py) | Poll a value and fire a callback |
+| 09 | [`09_multi_process.py`](examples/09_multi_process.py) | Attach to a second process |
 
-# read
-ptr.read_i8()    ptr.read_u8()
-ptr.read_i16()   ptr.read_u16()
-ptr.read_i32()   ptr.read_u32()
-ptr.read_i64()   ptr.read_u64()
-ptr.read_f32()   ptr.read_f64()
-ptr.read_ptr()                 # -> NativePointer
-ptr.read_bytes(n)              # -> bytes
-ptr.read_cstr(maxlen=256)      # -> str
+Each one teaches a single concept and can be run against any Linux target.
 
-# write
-ptr.write_i32(1337)
-ptr.write_f32(2.5)
-ptr.write_cstr("hello")
-ptr.write_bytes(b"\x90\x90")
+## Writing a bridge
 
-# pointer math
-ptr.add(0x10)
-ptr.follow(0x10, 0x8, 0x40)    # deref, add, deref, add, ...
-```
-
-### Scan
+A bridge is a small Python library that encodes your target's known layout,
+so cheat scripts stay short. Bridges live in their own repos.
 
 ```python
-scan = p.scan("48 8B 05 ?? ?? ?? ??")   # ?? byte wildcard, 4? nibble
-scan.first()      # -> NativePointer or None
-scan.all()        # -> list[NativePointer]
-scan.next()
-len(scan)
-
-p.scan("DE AD", module="libc.so.6")     # restrict to one module
-```
-
-### Call into the target
-
-```python
-p.fn("GetFPS")()
-p.fn("SetTargetFPS")(240)
-p.fn("GetFrameTime").call(ret="f32")
-p.fn("GetTime").call(ret="f64")
-
-# Struct-by-value
-p.fn("DrawSphere").call(
-    ("v3", 10.0, 5.0, 10.0),
-    ("f",  3.0),
-    ("i",  0xFF0000FF),
-)
-```
-
-Arg tags: `("i",v)` `("f",v)` `("v2",x,y)` `("v3",x,y,z)` `("v4",x,y,z,w)`.
-
-### Hooks
-
-```python
-orig = p.hook("add_score", "add_score_boost")   # inline, w/ trampoline
-orig.call((10,))                                 # run the original
-p.unhook("add_score")
-
-p.patch(addr, b"\x90" * 8)                       # raw byte patch
-p.hooks()                                        # list active
-```
-
-### Watchers (polling callbacks)
-
-```python
-w = p.watch(addr, "i32", interval=0.05)
-w.on_change(lambda old, new: print(f"{old} -> {new}"))
-w.start()
-w.stop()
-```
-
-### Allocate memory in the target
-
-```python
-buf = p.alloc(4096)
-buf.write_cstr("hello")
-```
-
-## Writing your own bridge
-
-pokext has no game-specific knowledge. A bridge is a small Python library
-that imports `pokexhl` and encodes the target's known layout — struct
-offsets, cvar names, pointer chains — so cheat scripts stay short.
-
-```python
-# mygame.py — bridge for MyGame
+# mygame.py
 import pokexhl as px
 
 class MyGame:
@@ -252,15 +200,17 @@ class MyGame:
 ```
 
 ```python
-# cheat.py — uses the bridge
+# cheat.py
 from mygame import MyGame
+import time
+
 g = MyGame()
 while True:
     g.health = 9999
+    time.sleep(0.1)
 ```
 
-Bridges live in their own repos and are installed separately. They are
-just Python files on `sys.path`.
+Full bridge-writing guide in the [cheat sheet](docs/cheatsheet.html).
 
 ## Limitations
 
@@ -277,6 +227,12 @@ pokext is external, which means:
 - **x86-64 only.** ARM64 support is a port of the register layer, not a
   recompile.
 
+## Roadmap
+
+- **v0.4.5** — multi-threaded ptrace attach
+- **v0.5.0** — in-process callbacks via ring buffer + injected stub
+- **Later** — ARM64 register layer, formal bridge template
+
 ## Legal
 
 pokext is a research and development tool. Use it on processes you own or
@@ -286,4 +242,4 @@ game's terms of service. The author assumes no responsibility for misuse.
 
 ## License
 
-MIT — see `LICENSE`.
+MIT — see [`LICENSE`](LICENSE).
