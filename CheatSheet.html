@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>pokext — Cheat Sheet</title>
+<style>
+  :root {
+    --bg:        #0d1117;
+    --bg-elev:   #161b22;
+    --bg-code:   #0a0d12;
+    --border:    #21262d;
+    --border-hi: #30363d;
+    --fg:        #c9d1d9;
+    --fg-dim:    #8b949e;
+    --fg-bright: #f0f6fc;
+    --accent:    #00ff88;
+    --accent-dim:#00cc66;
+    --warn:      #f0883e;
+    --purple:    #bc8cff;
+    --blue:      #58a6ff;
+    --pink:      #ff7b72;
+    --yellow:    #ffd866;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---- layout ---- */
+  .layout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    max-width: 1400px;
+    margin: 0 auto;
+    gap: 0;
+    min-height: 100vh;
+  }
+
+  /* ---- sidebar ---- */
+  nav.toc {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    border-right: 1px solid var(--border);
+    padding: 24px 0;
+    background: var(--bg);
+  }
+
+  nav.toc h2 {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--fg-dim);
+    padding: 0 20px;
+    margin: 0 0 12px;
+    font-weight: 600;
+  }
+
+  nav.toc a {
+    display: block;
+    padding: 6px 20px;
+    color: var(--fg-dim);
+    text-decoration: none;
+    font-size: 13.5px;
+    border-left: 2px solid transparent;
+    transition: all 0.15s;
+  }
+
+  nav.toc a:hover {
+    color: var(--fg-bright);
+    background: var(--bg-elev);
+    border-left-color: var(--accent-dim);
+  }
+
+  nav.toc a.sub {
+    padding-left: 34px;
+    font-size: 12.5px;
+    color: #6e7681;
+  }
+
+  /* ---- main ---- */
+  main {
+    padding: 40px 48px 120px;
+    max-width: 900px;
+  }
+
+  /* ---- banner ---- */
+  .banner {
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 32px;
+    font-family: "SF Mono", Monaco, "Cascadia Code", Consolas, monospace;
+    font-size: 12px;
+    line-height: 1.35;
+    color: var(--accent);
+    white-space: pre;
+    overflow-x: auto;
+  }
+
+  .banner .caption {
+    color: var(--fg-dim);
+    font-size: 11px;
+  }
+
+  /* ---- headings ---- */
+  h1 {
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--fg-bright);
+    margin: 0 0 8px;
+    letter-spacing: -0.02em;
+  }
+
+  h1 .tag {
+    font-size: 11px;
+    background: var(--accent-dim);
+    color: #000;
+    padding: 3px 8px;
+    border-radius: 4px;
+    vertical-align: middle;
+    margin-left: 10px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+
+  h2 {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--fg-bright);
+    margin: 56px 0 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    letter-spacing: -0.01em;
+  }
+
+  h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--fg-bright);
+    margin: 32px 0 10px;
+  }
+
+  h3::before {
+    content: "▸ ";
+    color: var(--accent-dim);
+  }
+
+  .lede {
+    color: var(--fg-dim);
+    font-size: 16px;
+    margin: 0 0 32px;
+  }
+
+  /* ---- code ---- */
+  code {
+    font-family: "SF Mono", Monaco, "Cascadia Code", Consolas, monospace;
+    font-size: 0.88em;
+    background: var(--bg-elev);
+    color: var(--pink);
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+
+  pre {
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    overflow-x: auto;
+    margin: 12px 0 20px;
+    font-size: 13px;
+    line-height: 1.55;
+    position: relative;
+  }
+
+  pre code {
+    background: none;
+    border: none;
+    color: var(--fg);
+    padding: 0;
+    font-size: inherit;
+  }
+
+  /* syntax highlighting */
+  .k  { color: var(--purple); }   /* keyword */
+  .s  { color: var(--yellow); }   /* string */
+  .c  { color: #6e7681; font-style: italic; }   /* comment */
+  .n  { color: var(--blue); }     /* number */
+  .f  { color: var(--accent); }   /* function */
+  .v  { color: var(--fg); }       /* variable */
+  .o  { color: var(--pink); }     /* operator */
+  .p  { color: var(--fg-dim); }   /* punctuation */
+  .t  { color: var(--warn); }     /* type */
+  .a  { color: #7ee787; }         /* attribute */
+
+  /* ---- tables ---- */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0 24px;
+    font-size: 14px;
+  }
+
+  th {
+    text-align: left;
+    padding: 10px 14px;
+    background: var(--bg-elev);
+    color: var(--fg-bright);
+    font-weight: 600;
+    font-size: 12.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid var(--border-hi);
+  }
+
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  td code {
+    font-size: 0.85em;
+    white-space: nowrap;
+  }
+
+  tr:hover td {
+    background: var(--bg-elev);
+  }
+
+  /* ---- callouts ---- */
+  .callout {
+    border-left: 3px solid var(--accent-dim);
+    background: rgba(0, 255, 136, 0.04);
+    padding: 12px 18px;
+    border-radius: 0 6px 6px 0;
+    margin: 16px 0;
+    font-size: 14px;
+  }
+
+  .callout.warn {
+    border-left-color: var(--warn);
+    background: rgba(240, 136, 62, 0.05);
+  }
+
+  .callout.warn strong {
+    color: var(--warn);
+  }
+
+  .callout strong {
+    color: var(--accent-dim);
+  }
+
+  .callout p:first-child { margin-top: 0; }
+  .callout p:last-child  { margin-bottom: 0; }
+
+  /* ---- inline key hints ---- */
+  kbd {
+    display: inline-block;
+    padding: 2px 7px;
+    font-family: "SF Mono", Monaco, monospace;
+    font-size: 12px;
+    background: var(--bg-elev);
+    border: 1px solid var(--border-hi);
+    border-radius: 4px;
+    color: var(--fg-bright);
+    box-shadow: 0 1px 0 var(--border-hi);
+  }
+
+  /* ---- pills ---- */
+  .pill {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    vertical-align: middle;
+  }
+  .pill.raw  { background: rgba(88, 166, 255, 0.15); color: var(--blue); }
+  .pill.hl   { background: rgba(188, 140, 255, 0.15); color: var(--purple); }
+  .pill.mix  { background: rgba(0, 255, 136, 0.12);  color: var(--accent); }
+  .pill.warn { background: rgba(240, 136, 62, 0.15); color: var(--warn); }
+
+  /* ---- mobile ---- */
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    nav.toc { display: none; }
+    main { padding: 24px 20px 80px; }
+    h1 { font-size: 24px; }
+    h2 { font-size: 19px; }
+    pre { font-size: 12px; padding: 12px 14px; }
+  }
+
+  /* ---- copy button ---- */
+  pre { position: relative; }
+  pre .copy {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: var(--bg-elev);
+    border: 1px solid var(--border-hi);
+    color: var(--fg-dim);
+    font-family: inherit;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  pre:hover .copy { opacity: 1; }
+  pre .copy:hover { color: var(--accent); border-color: var(--accent-dim); }
+  pre .copy.copied { color: var(--accent); border-color: var(--accent-dim); }
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+<nav class="toc">
+  <h2>Contents</h2>
+  <a href="#intro">Introduction</a>
+  <a href="#raw">1. Raw API</a>
+  <a href="#raw-sym"      class="sub">Symbols</a>
+  <a href="#raw-mem"      class="sub">Memory</a>
+  <a href="#raw-scan"     class="sub">Scan</a>
+  <a href="#raw-call"     class="sub">Calls</a>
+  <a href="#raw-hook"     class="sub">Hooks</a>
+  <a href="#raw-modules"  class="sub">Modules</a>
+  <a href="#hl">2. pokexhl</a>
+  <a href="#hl-proc"      class="sub">Process</a>
+  <a href="#hl-ptr"       class="sub">NativePointer</a>
+  <a href="#hl-scan"      class="sub">Scan</a>
+  <a href="#hl-call"      class="sub">Calls</a>
+  <a href="#hl-hook"      class="sub">Hooks</a>
+  <a href="#hl-watch"     class="sub">Watch</a>
+  <a href="#both">3. Combined</a>
+  <a href="#patterns">Common Patterns</a>
+  <a href="#types">Types</a>
+  <a href="#debug">Debugging</a>
+</nav>
+
+<main>
+
+<div class="banner">    ____       __          
+   / __ \____  / /_____     
+  / /_/ / __ \/ //_/ _ \    
+ / ____/ /_/ / ,< /  __/    
+/_/    \____/_/|_|\\___/     
+<span class="caption">   runtime memory patcher for linux x86-64   •   v0.4.4</span></div>
+
+<h1 id="intro">pokext Cheat Sheet <span class="tag">v0.4.4</span></h1>
+<p class="lede">
+  External memory patcher for Linux x86-64. Two APIs:
+  <span class="pill raw">raw</span> — the injected <code>target</code> object, no import needed,
+  and <span class="pill hl">pokexhl</span> — a Frida-shaped high-level wrapper.
+  Mix them freely; they read the same memory.
+</p>
+
+<div class="callout">
+  <strong>Setup:</strong>
+  <pre style="margin:8px 0 0; padding:10px 14px;"><code><span class="c"># install once</span>
+git clone https://github.com/&lt;you&gt;/pokext.git
+cd pokext &amp;&amp; ./install.sh
+
+<span class="c"># run any script</span>
+sudo pokext $(pidof -s &lt;target&gt;) script.py</code></pre>
+</div>
+
+<!-- ================================================================ -->
+<h2 id="raw">1. Raw API <span class="pill raw">no import</span></h2>
+
+<p>
+  Every script gets a <code>target</code> object in its globals.
+  No import, no wrapping — <code>target.read()</code>, <code>target.write()</code>, etc. work directly.
+</p>
+
+<h3 id="raw-sym">Symbols</h3>
+
+<pre><code><span class="c"># int32 by symbol name — implicit type</span>
+val = target<span class="p">.</span>score
+target<span class="p">.</span>score <span class="o">=</span> <span class="n">1337</span>
+
+<span class="c"># find an address explicitly</span>
+addr <span class="o">=</span> target<span class="p">.</span><span class="f">find</span>(<span class="s">"add_score"</span>)   <span class="c"># raises KeyError if missing</span></code></pre>
+
+<h3 id="raw-mem">Memory access</h3>
+
+<table>
+  <tr><th>Call</th><th>Returns</th></tr>
+  <tr><td><code>target.read(addr, "i32")</code></td><td>int (see type table)</td></tr>
+  <tr><td><code>target.write(addr, 2.5, "f32")</code></td><td>—</td></tr>
+  <tr><td><code>target.read_ptr(addr)</code></td><td>int (8-byte pointer)</td></tr>
+  <tr><td><code>target.read_bytes(addr, 16)</code></td><td>bytes</td></tr>
+  <tr><td><code>target.write_bytes(addr, b"\x90")</code></td><td>—</td></tr>
+  <tr><td><code>target.read_cstr(addr, 64)</code></td><td>str</td></tr>
+  <tr><td><code>target.write_cstr(addr, "hi")</code></td><td>—</td></tr>
+</table>
+
+<h3 id="raw-scan">Scanning</h3>
+
+<pre><code><span class="c"># first match or None</span>
+hit <span class="o">=</span> target<span class="p">.</span><span class="f">scan</span>(<span class="s">"48 8B 05 ?? ?? ?? ??"</span>)
+
+<span class="c"># every match — list of ints</span>
+hits <span class="o">=</span> target<span class="p">.</span><span class="f">scan_all</span>(<span class="s">"DE AD BE EF"</span>)
+
+<span class="c"># restrict to one module</span>
+hit <span class="o">=</span> target<span class="p">.</span><span class="f">scan</span>(<span class="s">"4? 8B ??"</span>, module<span class="o">=</span><span class="s">"libc.so.6"</span>)</code></pre>
+
+<div class="callout">
+  <strong>Wildcards:</strong> <code>??</code> matches any byte, <code>4?</code> matches any low nibble.
+</div>
+
+<h3 id="raw-call">Calls</h3>
+
+<pre><code><span class="c"># no args</span>
+target<span class="p">.</span><span class="f">call</span>(<span class="s">"GetFPS"</span>, ())
+
+<span class="c"># int args</span>
+target<span class="p">.</span><span class="f">call</span>(<span class="s">"SetTargetFPS"</span>, (<span class="n">240</span>,))
+
+<span class="c"># return as float</span>
+target<span class="p">.</span><span class="f">call</span>(<span class="s">"GetFrameTime"</span>, (), ret<span class="o">=</span><span class="s">"f32"</span>)
+
+<span class="c"># struct-by-value args (SysV AMD64 registers)</span>
+target<span class="p">.</span><span class="f">call_struct</span>(<span class="s">"DrawSphere"</span>, (
+    (<span class="s">"v3"</span>, <span class="n">10.0</span>, <span class="n">5.0</span>, <span class="n">10.0</span>),     <span class="c"># Vector3 → XMM0, XMM1</span>
+    (<span class="s">"f"</span>,  <span class="n">3.0</span>),                 <span class="c"># float   → XMM2</span>
+    (<span class="s">"i"</span>,  <span class="n">0xFF0000FF</span>),          <span class="c"># Color   → RDI</span>
+))</code></pre>
+
+<table>
+  <tr><th>Tag</th><th>Meaning</th><th>Registers</th></tr>
+  <tr><td><code>("i", n)</code></td><td>single integer</td><td>RDI, RSI, ...</td></tr>
+  <tr><td><code>("f", n)</code></td><td>single float</td><td>XMM0..7</td></tr>
+  <tr><td><code>("v2", x, y)</code></td><td>two floats</td><td>1 XMM</td></tr>
+  <tr><td><code>("v3", x, y, z)</code></td><td>three floats</td><td>2 XMM</td></tr>
+  <tr><td><code>("v4", x, y, z, w)</code></td><td>four floats</td><td>2 XMM</td></tr>
+</table>
+
+<h3 id="raw-hook">Hooks</h3>
+
+<pre><code><span class="c"># simple redirect — replacement runs instead of original</span>
+src, dst <span class="o">=</span> target<span class="p">.</span><span class="f">hook</span>(<span class="s">"add_score"</span>, <span class="s">"add_score_boost"</span>)
+
+<span class="c"># inline hook — returns a callable original via trampoline</span>
+tramp <span class="o">=</span> target<span class="p">.</span><span class="f">hook_inline</span>(<span class="s">"add_score"</span>, <span class="s">"add_score_boost"</span>, prologue<span class="o">=</span><span class="n">16</span>)
+target<span class="p">.</span><span class="f">call</span>(<span class="f">hex</span>(tramp), (<span class="n">10</span>,))   <span class="c"># run the ORIGINAL</span>
+target<span class="p">.</span><span class="f">unhook</span>(<span class="s">"add_score"</span>)
+
+<span class="c"># raw byte patch (works on .text via ptrace)</span>
+target<span class="p">.</span><span class="f">patch</span>(addr, <span class="s">b"\x90"</span> <span class="o">*</span> <span class="n">8</span>)
+
+<span class="c"># list active</span>
+<span class="k">for</span> h <span class="k">in</span> target<span class="p">.</span><span class="f">hooks</span>():
+    <span class="f">print</span>(h[<span class="s">"name"</span>], <span class="f">hex</span>(h[<span class="s">"addr"</span>]), <span class="s">"-&gt;"</span>, <span class="f">hex</span>(h[<span class="s">"replacement"</span>]))</code></pre>
+
+<h3 id="raw-modules">Modules &amp; meta</h3>
+
+<pre><code>target<span class="p">.</span>pid      <span class="c"># int</span>
+target<span class="p">.</span>base     <span class="c"># int, ELF load base</span>
+target<span class="p">.</span>exe      <span class="c"># str</span>
+
+<span class="k">for</span> m <span class="k">in</span> target<span class="p">.</span><span class="f">modules</span>():
+    <span class="f">print</span>(m<span class="p">.</span>name, <span class="f">hex</span>(m<span class="p">.</span>base), <span class="f">hex</span>(m<span class="p">.</span>size), m<span class="p">.</span>path)
+
+lib  <span class="o">=</span> target<span class="p">.</span><span class="f">module</span>(<span class="s">"libc.so.6"</span>)
+addr <span class="o">=</span> lib<span class="p">.</span><span class="f">symbol</span>(<span class="s">"malloc"</span>)
+
+<span class="c"># memory regions from /proc/pid/maps</span>
+<span class="k">for</span> r <span class="k">in</span> target<span class="p">.</span><span class="f">regions</span>():
+    <span class="f">print</span>(<span class="f">hex</span>(r[<span class="s">"start"</span>]), r[<span class="s">"perms"</span>], r[<span class="s">"path"</span>])</code></pre>
+
+<div class="callout">
+  <strong>Multi-process:</strong> <code>other = pokex.attach(6312)</code> opens a second target.
+  Same API on the returned object.
+</div>
+
+<!-- ================================================================ -->
+<h2 id="hl">2. pokexhl <span class="pill hl">high-level API</span></h2>
+
+<p>
+  Frida-shaped wrapper. Pointers are objects, modules have symbols,
+  functions are callable. Same underlying memory as the raw API.
+</p>
+
+<pre><code><span class="k">import</span> pokexhl <span class="k">as</span> px
+
+p <span class="o">=</span> px<span class="p">.</span><span class="t">Process</span>()</code></pre>
+
+<h3 id="hl-proc">Process</h3>
+
+<table>
+  <tr><th>Call</th><th>Returns</th></tr>
+  <tr><td><code>p.pid</code></td><td>int</td></tr>
+  <tr><td><code>p.base</code></td><td>NativePointer</td></tr>
+  <tr><td><code>p.exe</code></td><td>str</td></tr>
+  <tr><td><code>p.modules()</code></td><td>list[Module]</td></tr>
+  <tr><td><code>p.module("libc.so.6")</code></td><td>Module</td></tr>
+  <tr><td><code>p.sym("score")</code></td><td>NativePointer</td></tr>
+  <tr><td><code>p.fn("GetTime")</code></td><td>NativeFunction</td></tr>
+  <tr><td><code>p.ptr(0x7f1234)</code></td><td>NativePointer</td></tr>
+</table>
+
+<h3 id="hl-ptr">NativePointer</h3>
+
+<pre><code>ptr <span class="o">=</span> p<span class="p">.</span><span class="f">sym</span>(<span class="s">"score"</span>)
+ptr <span class="o">=</span> p<span class="p">.</span>base<span class="p">.</span><span class="f">add</span>(<span class="n">0x1000</span>)
+ptr <span class="o">=</span> p<span class="p">.</span><span class="f">ptr</span>(<span class="n">0x7f1234</span>)</code></pre>
+
+<h3>Reads</h3>
+<table>
+  <tr><th>Method</th><th>Returns</th></tr>
+  <tr><td><code>read_i8()</code> <code>read_u8()</code></td><td>int</td></tr>
+  <tr><td><code>read_i16()</code> <code>read_u16()</code></td><td>int</td></tr>
+  <tr><td><code>read_i32()</code> <code>read_u32()</code></td><td>int</td></tr>
+  <tr><td><code>read_i64()</code> <code>read_u64()</code></td><td>int</td></tr>
+  <tr><td><code>read_f32()</code> <code>read_f64()</code></td><td>float</td></tr>
+  <tr><td><code>read_ptr()</code></td><td>NativePointer</td></tr>
+  <tr><td><code>read_bytes(n)</code></td><td>bytes</td></tr>
+  <tr><td><code>read_cstr(maxlen=256)</code></td><td>str</td></tr>
+</table>
+
+<h3>Writes</h3>
+<pre><code>ptr<span class="p">.</span><span class="f">write_i32</span>(<span class="n">1337</span>)
+ptr<span class="p">.</span><span class="f">write_f32</span>(<span class="n">2.5</span>)
+ptr<span class="p">.</span><span class="f">write_cstr</span>(<span class="s">"hello"</span>)
+ptr<span class="p">.</span><span class="f">write_bytes</span>(<span class="s">b"\x90\x90"</span>)</code></pre>
+
+<h3>Pointer math</h3>
+<pre><code>ptr<span class="p">.</span><span class="f">add</span>(<span class="n">0x10</span>)                 <span class="c"># → NativePointer</span>
+ptr<span class="p">.</span><span class="f">follow</span>(<span class="n">0x10</span>, <span class="n">0x8</span>, <span class="n">0x40</span>)   <span class="c"># deref, +offset, deref, +offset, ...</span></code></pre>
+
+<h3 id="hl-scan">Scan</h3>
+
+<pre><code>scan <span class="o">=</span> p<span class="p">.</span><span class="f">scan</span>(<span class="s">"48 8B 05 ?? ?? ?? ??"</span>)
+scan<span class="p">.</span><span class="f">first</span>()      <span class="c"># → NativePointer or None</span>
+scan<span class="p">.</span><span class="f">all</span>()        <span class="c"># → list[NativePointer]</span>
+scan<span class="p">.</span><span class="f">next</span>()
+<span class="f">len</span>(scan)
+
+p<span class="p">.</span><span class="f">scan</span>(<span class="s">"DE AD"</span>, module<span class="o">=</span><span class="s">"libc.so.6"</span>)</code></pre>
+
+<h3 id="hl-call">Calls</h3>
+
+<pre><code>p<span class="p">.</span><span class="f">fn</span>(<span class="s">"GetFPS"</span>)()                              <span class="c"># → int</span>
+p<span class="p">.</span><span class="f">fn</span>(<span class="s">"SetTargetFPS"</span>)(<span class="n">240</span>)
+p<span class="p">.</span><span class="f">fn</span>(<span class="s">"GetFrameTime"</span>)<span class="p">.</span><span class="f">call</span>(ret<span class="o">=</span><span class="s">"f32"</span>)          <span class="c"># → float</span>
+p<span class="p">.</span><span class="f">fn</span>(<span class="s">"GetTime"</span>)<span class="p">.</span><span class="f">call</span>(ret<span class="o">=</span><span class="s">"f64"</span>)               <span class="c"># → double</span>
+
+p<span class="p">.</span><span class="f">fn</span>(<span class="s">"DrawSphere"</span>)<span class="p">.</span><span class="f">call</span>(
+    (<span class="s">"v3"</span>, <span class="n">10.0</span>, <span class="n">5.0</span>, <span class="n">10.0</span>),
+    (<span class="s">"f"</span>,  <span class="n">3.0</span>),
+    (<span class="s">"i"</span>,  <span class="n">0xFF0000FF</span>),
+)</code></pre>
+
+<h3 id="hl-hook">Hooks</h3>
+
+<pre><code>orig <span class="o">=</span> p<span class="p">.</span><span class="f">hook</span>(<span class="s">"add_score"</span>, <span class="s">"add_score_boost"</span>)
+orig<span class="p">.</span><span class="f">call</span>((<span class="n">10</span>,))            <span class="c"># run original via trampoline</span>
+p<span class="p">.</span><span class="f">unhook</span>(<span class="s">"add_score"</span>)
+
+p<span class="p">.</span><span class="f">patch</span>(addr, <span class="s">b"\x90"</span> <span class="o">*</span> <span class="n">8</span>)
+p<span class="p">.</span><span class="f">hooks</span>()</code></pre>
+
+<h3 id="hl-watch">Watch</h3>
+
+<pre><code>w <span class="o">=</span> p<span class="p">.</span><span class="f">watch</span>(addr, <span class="s">"i32"</span>, interval<span class="o">=</span><span class="n">0.05</span>)
+w<span class="p">.</span><span class="f">on_change</span>(<span class="k">lambda</span> old, new: <span class="f">print</span>(<span class="s">f"{old} -&gt; {new}"</span>))
+w<span class="p">.</span><span class="f">start</span>()      <span class="c"># non-blocking daemon thread</span>
+w<span class="p">.</span><span class="f">stop</span>()       <span class="c"># later</span></code></pre>
+
+<h3>Allocate in target</h3>
+
+<pre><code>buf <span class="o">=</span> p<span class="p">.</span><span class="f">alloc</span>(<span class="n">4096</span>)       <span class="c"># RWX mmap inside the target</span>
+buf<span class="p">.</span><span class="f">write_cstr</span>(<span class="s">"hello"</span>)</code></pre>
+
+<!-- ================================================================ -->
+<h2 id="both">3. Both in one file <span class="pill mix">combined</span></h2>
+
+<pre><code><span class="c"># example.py — raw + high-level API mixed</span>
+<span class="c"># run: sudo pokext $(pidof -s &lt;target&gt;) example.py</span>
+<span class="k">import</span> time
+<span class="k">import</span> struct
+
+<span class="k">import</span> pokexhl <span class="k">as</span> px
+
+
+<span class="c"># ==================== raw API ====================</span>
+<span class="c"># `target` is injected into globals by pokext</span>
+<span class="c"># No import needed, no wrapper</span>
+
+<span class="f">print</span>(<span class="s">"--- raw API ---"</span>)
+
+<span class="k">try</span>:
+    score_addr <span class="o">=</span> target<span class="p">.</span><span class="f">find</span>(<span class="s">"score"</span>)
+    <span class="f">print</span>(<span class="s">f"score @ 0x{score_addr:x}"</span>)
+    <span class="f">print</span>(<span class="s">f"score = {target.read(score_addr, 'i32')}"</span>)
+
+    target<span class="p">.</span><span class="f">write</span>(score_addr, <span class="n">9999</span>, <span class="s">"i32"</span>)
+    <span class="f">print</span>(<span class="s">f"after write = {target.read(score_addr, 'i32')}"</span>)
+<span class="k">except</span> <span class="t">KeyError</span> <span class="k">as</span> e:
+    <span class="f">print</span>(<span class="s">f"symbol not found: {e}"</span>)
+
+<span class="c"># raw scan</span>
+hits <span class="o">=</span> target<span class="p">.</span><span class="f">scan_all</span>(<span class="s">"48 8B 05 ?? ?? ?? ??"</span>)
+<span class="f">print</span>(<span class="s">f"raw scan: {len(hits)} hits"</span>)
+
+
+<span class="c"># ==================== high-level API ====================</span>
+
+<span class="f">print</span>(<span class="s">"\n--- high-level API ---"</span>)
+
+p <span class="o">=</span> px<span class="p">.</span><span class="t">Process</span>()
+
+<span class="f">print</span>(<span class="s">f"attached to {p.exe} (pid {p.pid})"</span>)
+<span class="f">print</span>(<span class="s">f"base: {p.base}"</span>)
+
+<span class="c"># same operations, object style</span>
+<span class="k">try</span>:
+    score <span class="o">=</span> p<span class="p">.</span><span class="f">sym</span>(<span class="s">"score"</span>)
+    <span class="f">print</span>(<span class="s">f"score @ {score}"</span>)
+    <span class="f">print</span>(<span class="s">f"score = {score.read_i32()}"</span>)
+
+    score<span class="p">.</span><span class="f">write_i32</span>(<span class="n">7777</span>)
+    <span class="f">print</span>(<span class="s">f"after write = {score.read_i32()}"</span>)
+<span class="k">except</span> <span class="t">KeyError</span> <span class="k">as</span> e:
+    <span class="f">print</span>(<span class="s">f"symbol not found: {e}"</span>)
+
+<span class="c"># call into target</span>
+<span class="k">try</span>:
+    fps <span class="o">=</span> p<span class="p">.</span><span class="f">fn</span>(<span class="s">"GetFPS"</span>)()
+    <span class="f">print</span>(<span class="s">f"GetFPS = {fps}"</span>)
+<span class="k">except</span> <span class="t">KeyError</span>:
+    <span class="k">pass</span>
+
+
+<span class="c"># ==================== both together ====================</span>
+
+<span class="f">print</span>(<span class="s">"\n--- mixed ---"</span>)
+
+<span class="c"># build a pointer chain with pokexhl</span>
+<span class="k">try</span>:
+    player_ptr <span class="o">=</span> p<span class="p">.</span><span class="f">sym</span>(<span class="s">"player"</span>)
+    hp_addr    <span class="o">=</span> player_ptr<span class="p">.</span><span class="f">follow</span>(<span class="n">0x10</span>, <span class="n">0x8</span>)
+
+    <span class="c"># read the same memory both ways</span>
+    hp_hl  <span class="o">=</span> hp_addr<span class="p">.</span><span class="f">read_i32</span>()
+    hp_raw <span class="o">=</span> target<span class="p">.</span><span class="f">read</span>(hp_addr<span class="p">.</span>addr, <span class="s">"i32"</span>)
+    <span class="f">print</span>(<span class="s">f"health: hl={hp_hl}  raw={hp_raw}  match={hp_hl == hp_raw}"</span>)
+<span class="k">except</span> <span class="t">KeyError</span>:
+    <span class="k">pass</span>
+
+<span class="c"># raw scan, then wrap results as NativePointers</span>
+raw_hits <span class="o">=</span> target<span class="p">.</span><span class="f">scan_all</span>(<span class="s">"DE AD BE EF"</span>)
+wrapped  <span class="o">=</span> [p<span class="p">.</span><span class="f">ptr</span>(h) <span class="k">for</span> h <span class="k">in</span> raw_hits]
+<span class="f">print</span>(<span class="s">f"found {len(wrapped)} hits, first = {wrapped[0] if wrapped else 'none'}"</span>)
+
+
+<span class="c"># ==================== practical cheat ====================</span>
+
+<span class="f">print</span>(<span class="s">"\n--- cheat: pin score at 999999 ---"</span>)
+
+<span class="k">try</span>:
+    score <span class="o">=</span> p<span class="p">.</span><span class="f">sym</span>(<span class="s">"score"</span>)
+    <span class="f">print</span>(<span class="s">"press Ctrl-C to stop\n"</span>)
+
+    <span class="k">while</span> <span class="t">True</span>:
+        score<span class="p">.</span><span class="f">write_i32</span>(<span class="n">999999</span>)
+        current <span class="o">=</span> target<span class="p">.</span><span class="f">read</span>(score<span class="p">.</span>addr, <span class="s">"i32"</span>)
+        <span class="f">print</span>(<span class="s">f"\rscore = {current}"</span>, end<span class="o">=</span><span class="s">""</span>, flush<span class="o">=</span><span class="t">True</span>)
+        time<span class="p">.</span><span class="f">sleep</span>(<span class="n">0.1</span>)
+<span class="k">except</span> <span class="t">KeyboardInterrupt</span>:
+    <span class="f">print</span>(<span class="s">"\nstopped"</span>)
+<span class="k">except</span> <span class="t">KeyError</span>:
+    <span class="f">print</span>(<span class="s">"no 'score' symbol — try the scan version"</span>)</code></pre>
+
+<div class="callout">
+  <strong>When to use which:</strong>
+  raw for quick pokes and REPL exploration; pokexhl for anything
+  longer than five lines. They read the same memory, so mix freely.
+</div>
+
+<!-- ================================================================ -->
+<h2 id="patterns">Common Patterns</h2>
+
+<h3>Scan and pin</h3>
+<pre><code><span class="k">import</span> struct, time
+<span class="k">import</span> pokexhl <span class="k">as</span> px
+
+p <span class="o">=</span> px<span class="p">.</span><span class="t">Process</span>()
+
+v <span class="o">=</span> <span class="f">int</span>(<span class="f">input</span>(<span class="s">"current value: "</span>))
+hits <span class="o">=</span> p<span class="p">.</span><span class="f">scan</span>(struct<span class="p">.</span><span class="f">pack</span>(<span class="s">"&lt;i"</span>, v)<span class="p">.</span><span class="f">hex</span>(<span class="s">" "</span>))<span class="p">.</span><span class="f">all</span>()
+<span class="f">print</span>(<span class="s">f"{len(hits)} candidates"</span>)
+
+<span class="f">input</span>(<span class="s">"change it, then Enter"</span>)
+new <span class="o">=</span> <span class="f">int</span>(<span class="f">input</span>(<span class="s">"new value: "</span>))
+
+refined <span class="o">=</span> [h <span class="k">for</span> h <span class="k">in</span> hits <span class="k">if</span> h<span class="p">.</span><span class="f">read_i32</span>() <span class="o">==</span> new]
+addr <span class="o">=</span> refined[<span class="n">0</span>]
+<span class="f">print</span>(<span class="s">f"pinning at 9999"</span>)
+
+<span class="k">try</span>:
+    <span class="k">while</span> <span class="t">True</span>:
+        addr<span class="p">.</span><span class="f">write_i32</span>(<span class="n">9999</span>)
+        time<span class="p">.</span><span class="f">sleep</span>(<span class="n">0.1</span>)
+<span class="k">except</span> <span class="t">KeyboardInterrupt</span>:
+    <span class="k">pass</span></code></pre>
+
+<h3>Read multiple struct fields</h3>
+<pre><code><span class="k">import</span> pokexhl <span class="k">as</span> px
+p <span class="o">=</span> px<span class="p">.</span><span class="t">Process</span>()
+
+player <span class="o">=</span> p<span class="p">.</span><span class="f">sym</span>(<span class="s">"player_entity"</span>)
+
+hp    <span class="o">=</span> player<span class="p">.</span><span class="f">add</span>(<span class="n">0x40</span>)<span class="p">.</span><span class="f">read_i32</span>()
+armor <span class="o">=</span> player<span class="p">.</span><span class="f">add</span>(<span class="n">0x44</span>)<span class="p">.</span><span class="f">read_i32</span>()
+xp    <span class="o">=</span> target<span class="p">.</span><span class="f">read</span>(player<span class="p">.</span>addr <span class="o">+</span> <span class="n">0x48</span>, <span class="s">"i32"</span>)   <span class="c"># raw for variety</span>
+
+<span class="f">print</span>(<span class="s">f"hp={hp} armor={armor} xp={xp}"</span>)</code></pre>
+
+<h3>Watch and print</h3>
+<pre><code><span class="k">import</span> time
+<span class="k">import</span> pokexhl <span class="k">as</span> px
+
+p <span class="o">=</span> px<span class="p">.</span><span class="t">Process</span>()
+addr <span class="o">=</span> p<span class="p">.</span><span class="f">sym</span>(<span class="s">"health"</span>)
+
+w <span class="o">=</span> p<span class="p">.</span><span class="f">watch</span>(addr, <span class="s">"i32"</span>, interval<span class="o">=</span><span class="n">0.02</span>)
+w<span class="p">.</span><span class="f">on_change</span>(<span class="k">lambda</span> old, new: <span class="f">print</span>(<span class="s">f"health: {old} -&gt; {new}"</span>))
+w<span class="p">.</span><span class="f">start</span>()
+
+<span class="k">try</span>:
+    time<span class="p">.</span><span class="f">sleep</span>(<span class="n">60</span>)
+<span class="k">except</span> <span class="t">KeyboardInterrupt</span>:
+    w<span class="p">.</span><span class="f">stop</span>()</code></pre>
+
+<h3>Hook and log</h3>
+<pre><code><span class="k">import</span> time
+<span class="k">import</span> pokexhl <span class="k">as</span> px
+
+p <span class="o">=</span> px<span class="p">.</span><span class="t">Process</span>()
+
+<span class="k">try</span>:
+    orig <span class="o">=</span> p<span class="p">.</span><span class="f">hook</span>(<span class="s">"add_score"</span>, <span class="s">"add_score_boost"</span>)
+    <span class="f">print</span>(<span class="s">f"hooked. original callable at {orig.addr:#x}"</span>)
+    orig<span class="p">.</span><span class="f">call</span>((<span class="n">10</span>,))
+    time<span class="p">.</span><span class="f">sleep</span>(<span class="n">30</span>)
+<span class="k">finally</span>:
+    p<span class="p">.</span><span class="f">unhook</span>(<span class="s">"add_score"</span>)</code></pre>
+
+<h3>Print on screen (via engine)</h3>
+<pre><code><span class="k">import</span> time
+<span class="k">import</span> pokexhl <span class="k">as</span> px
+
+p <span class="o">=</span> px<span class="p">.</span><span class="t">Process</span>()
+scratch <span class="o">=</span> p<span class="p">.</span><span class="f">alloc</span>(<span class="n">256</span>)
+fn <span class="o">=</span> p<span class="p">.</span><span class="f">fn</span>(<span class="s">"SCR_CenterPrint"</span>)
+
+<span class="k">while</span> <span class="t">True</span>:
+    scratch<span class="p">.</span><span class="f">write_cstr</span>(<span class="s">"hello from pokext\x00"</span>)
+    fn(scratch<span class="p">.</span>addr)
+    time<span class="p">.</span><span class="f">sleep</span>(<span class="n">2</span>)</code></pre>
+
+<!-- ================================================================ -->
+<h2 id="types">Types</h2>
+
+<table>
+  <tr><th>Type string</th><th>Bytes</th><th>Python</th></tr>
+  <tr><td><code>i8</code> <code>int8</code></td><td>1</td><td>int</td></tr>
+  <tr><td><code>u8</code> <code>uint8</code></td><td>1</td><td>int</td></tr>
+  <tr><td><code>i16</code> <code>int16</code></td><td>2</td><td>int</td></tr>
+  <tr><td><code>u16</code> <code>uint16</code></td><td>2</td><td>int</td></tr>
+  <tr><td><code>i32</code> <code>int</code> <code>int32</code></td><td>4</td><td>int</td></tr>
+  <tr><td><code>u32</code> <code>uint32</code></td><td>4</td><td>int</td></tr>
+  <tr><td><code>i64</code> <code>int64</code></td><td>8</td><td>int</td></tr>
+  <tr><td><code>u64</code> <code>uint64</code></td><td>8</td><td>int</td></tr>
+  <tr><td><code>f32</code> <code>float</code></td><td>4</td><td>float</td></tr>
+  <tr><td><code>f64</code> <code>double</code></td><td>8</td><td>float</td></tr>
+  <tr><td><code>ptr</code> <code>p</code></td><td>8</td><td>int</td></tr>
+</table>
+
+<!-- ================================================================ -->
+<h2 id="debug">Debugging</h2>
+
+<table>
+  <tr><th>Symptom</th><th>Fix</th></tr>
+  <tr><td><code>KeyError: 'sym'</code></td><td>Binary stripped → use scan</td></tr>
+  <tr><td><code>ModuleNotFoundError: pokexhl</code></td><td>Not installed → <code>./install.sh</code></td></tr>
+  <tr><td><code>AttributeError: 'target'</code> in imported module</td><td>Rebuild with the <code>builtins</code> fix</td></tr>
+  <tr><td><code>OSError: Bad address</code></td><td>ptrace refused → run with <code>sudo</code></td></tr>
+  <tr><td>Call hangs forever</td><td>Target is blocking — don't call I/O or sleeps</td></tr>
+  <tr><td>Game crashes on hook</td><td>Bump <code>prologue=32</code> in <code>hook_inline</code></td></tr>
+  <tr><td>Values don't stick</td><td>Page is read-only → use <code>patch</code>, not <code>write</code></td></tr>
+</table>
+
+<div class="callout warn">
+  <strong>Legal.</strong> Use pokext on processes you own or have permission to
+  inspect. Using it against software you don't control, or in online games
+  with anti-cheat, will get you banned and may violate the game's terms of
+  service.
+</div>
+
+</main>
+</div>
+
+<script>
+  // Add copy buttons to every pre block
+  document.querySelectorAll('pre').forEach(pre => {
+    const btn = document.createElement('button');
+    btn.className = 'copy';
+    btn.textContent = 'copy';
+    btn.onclick = () => {
+      const text = pre.querySelector('code')?.innerText ?? pre.innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = 'copied';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'copy';
+          btn.classList.remove('copied');
+        }, 1500);
+      });
+    };
+    pre.appendChild(btn);
+  });
+
+  // Highlight current TOC section on scroll
+  const tocLinks = document.querySelectorAll('nav.toc a[href^="#"]');
+  const sections = [...tocLinks].map(a => document.getElementById(a.getAttribute('href').slice(1))).filter(Boolean);
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const id = e.target.id;
+      tocLinks.forEach(a => {
+        const active = a.getAttribute('href') === '#' + id;
+        a.style.color = active ? 'var(--accent)' : '';
+        a.style.borderLeftColor = active ? 'var(--accent)' : '';
+      });
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>
