@@ -24,7 +24,7 @@ process — all from outside the target.
   <a href="#limitations">Limitations</a>
 </p>
 
-> **Full API reference:** [`/cheatsheet.html`](/cheatsheet.html) — every
+> **Full API reference:** [`/cheatsheet.html`](/CheatSheet.html) — every
 > method, every type, every example. Single HTML file, no dependencies.
 
 ## What it is
@@ -140,7 +140,7 @@ sudo pokext $(pidof -s mytarget) examples/01_hello.py
 ## Cheat sheet
 
 Everything you need to write scripts lives in
-[`/cheatsheet.html`]/cheatsheet.html):
+[`/cheatsheet.html`]/CheatSheet.html):
 
 - **Both APIs** — the raw `target` object and the high-level `pokexhl` wrapper,
   side by side
@@ -210,7 +210,7 @@ while True:
     time.sleep(0.1)
 ```
 
-Full bridge-writing guide in the [cheat sheet](/cheatsheet.html).
+Full bridge-writing guide in the [cheat sheet](/CheatSheet.html).
 
 ## Limitations
 
