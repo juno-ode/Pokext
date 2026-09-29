@@ -72,7 +72,7 @@ sudo pacman -S base-devel python
 ## Install
 
 ```bash
-git clone https://github.com/<you>/pokext.git
+git clone https://github.com/juno-ode/pokext.git
 cd pokext
 ./install.sh
 ```
@@ -140,7 +140,7 @@ sudo pokext $(pidof -s mytarget) examples/01_hello.py
 ## Cheat sheet
 
 Everything you need to write scripts lives in
-[`docs/cheatsheet.html`](docs/cheatsheet.html):
+[`/cheatsheet.html`]/cheatsheet.html):
 
 - **Both APIs** — the raw `target` object and the high-level `pokexhl` wrapper,
   side by side
@@ -155,7 +155,7 @@ Everything you need to write scripts lives in
 - **Search** — <kbd>Ctrl-F</kbd> to jump to any method
 
 Open it locally, or enable GitHub Pages (repo → Settings → Pages → `/docs`)
-and it's served at `https://<you>.github.io/pokext/cheatsheet.html`.
+and it's served at `https://juno.ode.github.io/pokext/cheatsheet.html`.
 
 ## Examples
 
@@ -210,7 +210,7 @@ while True:
     time.sleep(0.1)
 ```
 
-Full bridge-writing guide in the [cheat sheet](docs/cheatsheet.html).
+Full bridge-writing guide in the [cheat sheet](/cheatsheet.html).
 
 ## Limitations
 
