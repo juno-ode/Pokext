@@ -24,7 +24,7 @@ process — all from outside the target.
   <a href="#limitations">Limitations</a>
 </p>
 
-> **Full API reference:** [`docs/cheatsheet.html`](docs/cheatsheet.html) — every
+> **Full API reference:** [`/cheatsheet.html`](docs/cheatsheet.html) — every
 > method, every type, every example. Single HTML file, no dependencies.
 
 ## What it is
